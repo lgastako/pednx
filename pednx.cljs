@@ -26,36 +26,85 @@
   [& args]
   (throw (ex-info (str "not-implemented: " args) {:args args})))
 
-;; TODO: How do we include these fns with question marks, e.g. "nil?" -- as nilq maybe?
-;; nil?
-;; number?
-;; some?
-;; object?
-;; string?
-;; char?
+;; TODO: How do we include these fns with question marks, e.g. "nil?" -- as "nilq" maybe? "nil_q"?
+;; - associative?
+;; - char?
+;; - coll?
+;; - counted?
+;; - contains?
+;; - distinct
+;; - empty?
+;; - false?
+;; - fn?
+;; - indexed?
+;; - integer
+;; - iterable?
+;; - map?
+;; - nil?
+;; - number?
+;; - object?
+;; - set?
+;; - seq?
+;; - seqable?
+;; - sequential?
+;; - some?
+;; - sorted?
+;; - string?
+;; - symbol?
+;; - true?
+;; - undefined?
+;; - vector?
 
 (defn fn<-cmd [cmd]
   ;; (p :fn<-cmd {:cmd cmd})
   (if-let [fn (case cmd
                 ;; TODO: automate from whitelist
+                "="         =
+                "+"         +
+                "-"         -
+                "/"         "/"
+                "*"         "*"
                 "aget"      aget
                 "alength"   alength
                 "aset"      aset
                 "assoc"     assoc
                 "assoc-in"  assoc-in
+                "boolean"   boolean
+                "butlast"   butlast
                 "conj"      conj
                 "count"     count
                 "dec"       dec
                 "disj"      disj
                 "dissoc"    dissoc
+                "empty"     empty
+                "ffirst"    ffirst
+                "find"      find
+                "first"     first
+                "fnext"     fnext
+                "get"       get
                 "inc"       inc
                 "identity"  identity
+                "last"      last
                 "list"      list
                 "map"       map
+                "name"      name
+                "nfirst"    nfirst
+                "next"      next
+                "nnext"     nnext
                 "not"       not
                 "nth"       nth
+                "nthrest"   nthrest
+                "peek"      peek
+                "pop"       pop
+                "pr-str"    pr-str
                 "reduce"    reduce
+                "rest"      rest
+                "second"    second
                 "set"       set
+                "shuffle"   shuffle
+                "sort"      sort
+                "str"       str
+                "symbol"    symbol
                 "update"    update
                 "update-in" update-in
                 "vec"       vec
@@ -71,7 +120,7 @@
   (-close [_]))
 
 (defn <-stdin []
-  (p :<-stdin)
+  ;; (p :<-stdin)
   (let [r  *in*
         sb (StringBuffer.)]
     (loop [s (-read r)]
@@ -107,12 +156,12 @@
   )
 
 (defn spit+ [fn data]
-  (p :spit+ {:fn fn :data data})
+  ;; (p :spit+ {:fn fn :data data})
   (create-if-not-exists! fn)
   (spit fn data))
 
 (defn write-output [fn data]
-  (p ::write-output {:fn fn :data data})
+  ;; (p ::write-output {:fn fn :data data})
   (let [serialized (serialize data)]
     (if (= fn "-")
       (->stdout serialized)
@@ -125,11 +174,11 @@
   )
 
 (defn invoke [f fn args]
-  (p :invoke {:f (fn-name f) :fn fn :args args})
+  ;; (p :invoke {:f (fn-name f) :fn fn :args args})
   (let [data (read-input fn)
         data' (apply f data args)]
-    (p :invoke {:data data})
-    (p :invoke {:data' data'})
+    ;; (p :invoke {:data data})
+    ;; (p :invoke {:data' data'})
     (write-output fn data')))
 
 (defn deserialize-args [args]
@@ -139,7 +188,7 @@
   ;; Ideally we'd be able to look at argv[0] and get the command name, but haven't
   ;; figured out how to do that with planck yet, so, for now we'll require the
   ;; first arg to be the command name
-  (p :parse-args {:args args})
+  ;; (p :parse-args {:args args})
   {:cmd (first args)
    :error nil
    :fn (second args)
@@ -158,7 +207,7 @@
    'second  second})
 
 (defn sym->f [sym]
-  (p :sym->f {:sym sym})
+  ;; (p :sym->f {:sym sym})
   (if-let [f (symbol->fn-map sym)]
     f
     boom))
@@ -175,18 +224,18 @@
       identity)))
 
 (defn customize-args [cmd args]
-  (p :customize-args {:cmd cmd :args args})
+  ;; (p :customize-args {:cmd cmd :args args})
   (if-let [arg-customizer (get-arg-customizer cmd)]
     (do
-      (p :customize-args :customizing...)
+      ;; (p :customize-args :customizing...)
       (arg-customizer args))
     args))
 
 (defn -main [& args]
-  (p :-main {:args args})
+  ;; (p :-main {:args args})
   (let [{:keys [cmd args fn error] :as parsed} (parse-args args)]
-    (p :parsed parsed)
-    (p {:cmd cmd :args args :error error})
+    ;; (p :parsed parsed)
+    ;; (p {:cmd cmd :args args :error error})
     (if error
       (p :error error)
       (if-let [f (fn<-cmd cmd)]
