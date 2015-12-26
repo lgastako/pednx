@@ -65,6 +65,12 @@
 ;; - vector?
 ;; - zero?
 
+;; what about the backwards arg'd ones? can we flip them?
+;; "drop"      drop
+;; "partition" partition
+;; "take"      take
+
+
 (defn fn<-cmd [cmd]
   ;; (p :fn<-cmd {:cmd cmd})
   (if-let [fn (case cmd
@@ -96,6 +102,9 @@
                 "ffirst"    ffirst
                 "find"      find
                 "first"     first
+                "filter"    filter
+                "filterv"   filterv
+                "flatten"   flatten
                 "fnext"     fnext
                 "fnil"      fnil
                 "get"       get
@@ -106,6 +115,8 @@
                 "keep"      keep
                 "keyword"   keyword
                 "map"       map
+                "mapv"      mapv
+                "mapcat"    mapcat
                 "max"       max
                 "min"       min
                 "name"      name
@@ -249,13 +260,16 @@
             (fn [args]
               (update (vec args) n sym->f)))]
     (case cmd
-      "apply"  (nth-sym->f 1)
-      "filter" (nth-sym->f 1)
-      "keep"   (nth-sym->f 1)
-      "map"    (nth-sym->f 1)
-      "reduce" (nth-sym->f 1)
-      "remove" (nth-sym->f 1)
-      "update" (nth-sym->f 1)
+      "apply"     (nth-sym->f 1)
+      "filter"    (nth-sym->f 1)
+      "filterv"   (nth-sym->f 1)
+      "keep"      (nth-sym->f 1)
+      "map"       (nth-sym->f 1)
+      "mapcat"    (nth-sym->f 1)
+      "reduce"    (nth-sym->f 1)
+      "remove"    (nth-sym->f 1)
+      "update"    (nth-sym->f 1)
+      "update-in" (nth-sym->f 1)
       identity)))
 
 (defn customize-args [cmd args]

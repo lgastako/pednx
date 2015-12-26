@@ -50,6 +50,8 @@ Coming soon.  For now, see pednx.cljs.
 
 ## TODO
 
+- locking?
+- tests for all existing functions
 - pprint, print-table, etc
 - clojure.set/*
 - bit operations?
