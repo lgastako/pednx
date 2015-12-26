@@ -6,8 +6,12 @@
             [planck.core :refer [*command-line-args* *in*
                                  IClosable IReader
                                  Reader Writer
+                                 -read
                                  slurp spit]]
             [planck.io :as io]))
+
+(defn boom [& args]
+  (throw (ex-info "boom" {:boom-args args})))
 
 (def serialize   (comp #(str % "\n") pr-str))
 (def deserialize read-string)
@@ -22,20 +26,42 @@
   [& args]
   (throw (ex-info (str "not-implemented: " args) {:args args})))
 
-(defn cmd-name
-  "Return the program name from the command line."
-  [args]
-  ;; (aget args 0)
-  args)
+;; TODO: How do we include these fns with question marks, e.g. "nil?" -- as nilq maybe?
+;; nil?
+;; number?
+;; some?
+;; object?
+;; string?
+;; char?
 
 (defn fn<-cmd [cmd]
-  (case cmd
-    "assoc" assoc
-    "assoc-in" assoc-in
-    "count" count
-    "dissoc" dissoc
-    "update" update
-    "update-in" update-in))
+  ;; (p :fn<-cmd {:cmd cmd})
+  (if-let [fn (case cmd
+                ;; TODO: automate from whitelist
+                "aget"      aget
+                "alength"   alength
+                "aset"      aset
+                "assoc"     assoc
+                "assoc-in"  assoc-in
+                "conj"      conj
+                "count"     count
+                "dec"       dec
+                "disj"      disj
+                "dissoc"    dissoc
+                "inc"       inc
+                "identity"  identity
+                "list"      list
+                "map"       map
+                "not"       not
+                "nth"       nth
+                "reduce"    reduce
+                "set"       set
+                "update"    update
+                "update-in" update-in
+                "vec"       vec
+                nil)]
+    fn
+    (throw (ex-info (str "usage: " cmd) {:cmd cmd}))))
 
 (defrecord CloseIgnorer [in]
   IReader
@@ -46,12 +72,8 @@
 
 (defn <-stdin []
   (p :<-stdin)
-  (with-redefs [planck.core/*reader-fn* (comp identity first)]
-    (slurp (CloseIgnorer. *in*)))
-  #_
-  (let [r  *in*;;(Reader. js/PLANCK_RAW_READ_STDIN nil)
+  (let [r  *in*
         sb (StringBuffer.)]
-    (p :<-stdin {:r r})
     (loop [s (-read r)]
       (if (nil? s)
         (.toString sb)
@@ -60,26 +82,41 @@
           (recur (-read r)))))))
 
 (defn read-input [fn]
-  (p :read-input {:fn fn})
-  (let [bytes (if (= fn "-")
-                (<-stdin)
-                (slurp fn))]
-    (deserialize bytes)))
+  ;; (p :read-input {:fn fn})
+  (try
+    (let [bytes (if (= fn "-")
+                  (<-stdin)
+                  (slurp fn))]
+      ;; (p :read-input {:bytes bytes})
+      (deserialize bytes))
+    (catch :default ex
+      (p :read-input {:ex ex})
+      nil)))
 
 
 (defn ->stdout [s]
-  (p :->stdout {:s s})
+  ;; (p :->stdout {:s s})
   (let [w (Writer. js/PLANCK_RAW_WRITE_STDOUT
                    js/PLANCK_RAW_FLUSH_STDOUT
                    nil)]
     (-write w s)))
+
+(defn create-if-not-exists! [fn]
+  (p :create-if-not-exists! {:fn fn})
+;;  (not-implemented "create-if-not-exists!")
+  )
+
+(defn spit+ [fn data]
+  (p :spit+ {:fn fn :data data})
+  (create-if-not-exists! fn)
+  (spit fn data))
 
 (defn write-output [fn data]
   (p ::write-output {:fn fn :data data})
   (let [serialized (serialize data)]
     (if (= fn "-")
       (->stdout serialized)
-      (spit fn serialized))))
+      (spit+ fn serialized))))
 
 (defn fn-name [f]
   ;; :redacted
@@ -102,23 +139,23 @@
   ;; Ideally we'd be able to look at argv[0] and get the command name, but haven't
   ;; figured out how to do that with planck yet, so, for now we'll require the
   ;; first arg to be the command name
+  (p :parse-args {:args args})
   {:cmd (first args)
    :error nil
    :fn (second args)
    :args (deserialize-args (rest (rest args)))})
 
-(defn boom [& args]
-  (throw (ex-info "boom" {:boom-args args})))
-
+;; These are the functions that can be passed to update
 (def symbol->fn-map
-  {'inc inc
-   'dec dec
-   'first first
-   'second second
-   'rest rest
-   'last last
-   'butlast butlast
-   'count count})
+  ;; How to automate without access to resolve/ns-resolve?
+  {'butlast butlast
+   'count   count
+   'dec     dec
+   'first   first
+   'inc     inc
+   'last    last
+   'rest    rest
+   'second  second})
 
 (defn sym->f [sym]
   (p :sym->f {:sym sym})
@@ -126,13 +163,16 @@
     f
     boom))
 
-(defn customize-update-args [args]
-  (update (vec args) 1 sym->f))
-
 (defn get-arg-customizer [cmd]
-  (case cmd
-    "update" customize-update-args
-    identity))
+  (letfn [(nth-sym->f [n]
+            (fn [args]
+              (update (vec args) n sym->f)))]
+    (case cmd
+      "filter" (nth-sym->f 1)
+      "map"    (nth-sym->f 1)
+      "reduce" (nth-sym->f 1)
+      "update" (nth-sym->f 1)
+      identity)))
 
 (defn customize-args [cmd args]
   (p :customize-args {:cmd cmd :args args})
@@ -144,7 +184,8 @@
 
 (defn -main [& args]
   (p :-main {:args args})
-  (let [{:keys [cmd args fn error]} (parse-args args)]
+  (let [{:keys [cmd args fn error] :as parsed} (parse-args args)]
+    (p :parsed parsed)
     (p {:cmd cmd :args args :error error})
     (if error
       (p :error error)
