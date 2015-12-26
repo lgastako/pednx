@@ -24,7 +24,7 @@ $ cat foo.edn
 - More examples
   - stdin/stdout
   - chains of pipes
-- Parse comman line as repeated reads instead of space separated reads, so we
+- Parse command line as repeated reads instead of space separated reads, so we
   can read vectors, maps, etc.
 
 ## License
