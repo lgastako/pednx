@@ -5,6 +5,16 @@ EDN Transforms for the command line.
 ednx is the spirtual predecessor targetting an npm installable node js command
 line module whereas pednx is a port to a single file shebangable planck script.
 
+## Prequisites
+
+First, install planck:
+
+```
+$ brew install planck
+```
+
+(or similar)
+
 ## Usage
 
 ```
