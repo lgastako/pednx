@@ -24,7 +24,7 @@ $ cat foo.edn
 $ pednx assoc-in foo.edn '[:baz :bif]' :bam
 $ cat foo.edn
 {:baz {:bif :bam}, :bar 5}
-$ pednx remove foo.edn :bar
+$ pednx dissoc foo.edn :bar
 $ cat foo.edn
 {:baz {:bif :bam}}
 ```
