@@ -1,14 +1,15 @@
 #!/usr/bin/env planck
 (ns pednx.cli
-  (:import [goog.string StringBuffer])
-  (:require [cljs.core :refer [*out*]]
-            [cljs.reader :refer [read-string]]
-            [planck.core :refer [*command-line-args* *in*
-                                 IClosable IReader
-                                 Reader Writer
-                                 -read
-                                 slurp spit]]
-            [planck.io :as io]))
+  (:import  [goog.string    StringBuffer])
+  (:require [cljs.core      :refer [*out*]]
+            [cljs.reader    :refer [read-string]]
+            [clojure.string :as str]
+            [planck.core    :refer [*command-line-args* *in*
+                                    IClosable IReader
+                                    Reader Writer
+                                    -read
+                                    slurp spit]]
+            [planck.io      :as io]))
 
 (defn boom [& args]
   (throw (ex-info "boom" {:boom-args args})))
@@ -26,50 +27,21 @@
   [& args]
   (throw (ex-info (str "not-implemented: " args) {:args args})))
 
-;; TODO: How do we include these fns with question marks, e.g. "nil?" -- as "nilq" maybe? "nil_q"?
-;; - associative?
-;; - char?
-;; - coll?
-;; - counted?
-;; - contains?
-;; - distinct
-;; - empty?
-;; - even
-;; - every?
-;; - false?
-;; - fn?
-;; - indexed?
-;; - integer
-;; - iterable?
-;; - keyword?
-;; - list?
-;; - map?
-;; - neg?
-;; - nil?
-;; - not-any?
-;; - not-every?
-;; - number?
-;; - odd?
-;; - object?
-;; - pos?
-;; - set?
-;; - seq?
-;; - seqable?
-;; - sequential?
-;; - some?
-;; - sorted?
-;; - string?
-;; - symbol?
-;; - true?
-;; - undefined?
-;; - vector?
-;; - zero?
+
+(defn pred [x]
+  ;; TODO: How do we include these fns with question marks
+  ;; e.g. "nil?"
+  ;;      nilq
+  ;;      nilp
+  ;;      nil_q
+  ;;      nil_pred
+  (str/replace x #"\\?" "p"))
 
 ;; what about the backwards arg'd ones? can we flip them?
 ;; "drop"      drop
 ;; "partition" partition
 ;; "take"      take
-
+;; bunch more, see https://github.com/clojure/clojurescript/blob/master/src/main/cljs/cljs/core.cljs
 
 (defn fn<-cmd [cmd]
   ;; (p :fn<-cmd {:cmd cmd})
@@ -78,12 +50,12 @@
                 "="           =
                 "+"           +
                 "-"           -
-                "/"           /
+                ;; "/"           /
                 "*"           *
                 ">"           >
                 "<"           <
                 "<="          <=
-                "=>"          =>
+                ">="          >=
                 "aget"        aget
                 "alength"     alength
                 "apply"       apply
@@ -158,6 +130,44 @@
                 "vals"        vals
                 "vec"         vec
                 "vector"      vector
+                ;; predicate fns in the form of `x?` become commands in the form of `xp`
+                "associativep" associative?
+                "charp"        char?
+                "collp"        coll?
+                "countedp"     counted?
+                "containsp"    contains?
+                "distincp"     distinct
+                "emptyp"       empty?
+                "evenp"         even?
+                "everyp"       every?
+                "falsep"       false?
+                "fnp"          fn?
+                "indexedp"     indexed?
+                "integep"      integer?
+                "iterablep"    iterable?
+                "keywordp"     keyword?
+                "listp"        list?
+                "mapp"         map?
+                "negp"         neg?
+                "nilp"         nil?
+                "not-anyp"     not-any?
+                "not-everyp"   not-every?
+                "numberp"      number?
+                "oddp"         odd?
+                "objectp"      object?
+                "posp"         pos?
+                "setp"         set?
+                "seqp"         seq?
+                "seqablep"     seqable?
+                "sequentialp"  sequential?
+                "somep"        some?
+                "sortedp"      sorted?
+                "stringp"      string?
+                "symbolp"      symbol?
+                "truep"        true?
+                "undefinedp"   undefined?
+                "vectorp"      vector?
+                "zerop"        zero?
                 nil)]
     fn
     ;; TODO: real usage
