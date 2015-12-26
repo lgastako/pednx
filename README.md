@@ -55,6 +55,7 @@ Coming soon.  For now, see pednx.cljs.
 - pprint, print-table, etc
 - clojure.set/*
 - regexes
+- math namespace
 - bit operations?
 - More examples
   - stdin/stdout
