@@ -110,7 +110,8 @@
                 "vec"       vec
                 nil)]
     fn
-    (throw (ex-info (str "usage: " cmd) {:cmd cmd}))))
+    ;; TODO: real usage
+    (throw (ex-info (str "usage: fixme " cmd) {:cmd cmd}))))
 
 (defrecord CloseIgnorer [in]
   IReader
