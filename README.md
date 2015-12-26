@@ -29,8 +29,30 @@ $ cat foo.edn
 {:baz {:bif :bam}}
 ```
 
+## Examples
+
+### Counter
+
+```
+$ ls -l counter.edn
+ls: counter.edn: No such file or directory
+$ pednx inc counter.edn
+$ cat counter.edn
+1
+$ pednx inc counter.edn
+$ cat counter.edn
+2
+```
+
+### List of Functions
+
+Coming soon.  For now, see pednx.cljs.
+
 ## TODO
 
+- pprint, print-table, etc
+- clojure.set/*
+- bit operations?
 - More examples
   - stdin/stdout
   - chains of pipes

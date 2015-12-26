@@ -34,15 +34,24 @@
 ;; - contains?
 ;; - distinct
 ;; - empty?
+;; - even
+;; - every?
 ;; - false?
 ;; - fn?
 ;; - indexed?
 ;; - integer
 ;; - iterable?
+;; - keyword?
+;; - list?
 ;; - map?
+;; - neg?
 ;; - nil?
+;; - not-any?
+;; - not-every?
 ;; - number?
+;; - odd?
 ;; - object?
+;; - pos?
 ;; - set?
 ;; - seq?
 ;; - seqable?
@@ -54,6 +63,7 @@
 ;; - true?
 ;; - undefined?
 ;; - vector?
+;; - zero?
 
 (defn fn<-cmd [cmd]
   ;; (p :fn<-cmd {:cmd cmd})
@@ -62,15 +72,21 @@
                 "="         =
                 "+"         +
                 "-"         -
-                "/"         "/"
-                "*"         "*"
+                "/"         /
+                "*"         *
+                ">"         >
+                "<"         <
+                "<="        <=
+                "=>"        =>
                 "aget"      aget
                 "alength"   alength
+                "apply"     apply
                 "aset"      aset
                 "assoc"     assoc
                 "assoc-in"  assoc-in
                 "boolean"   boolean
                 "butlast"   butlast
+                "concat"    concat
                 "conj"      conj
                 "count"     count
                 "dec"       dec
@@ -81,29 +97,41 @@
                 "find"      find
                 "first"     first
                 "fnext"     fnext
+                "fnil"      fnil
                 "get"       get
                 "inc"       inc
                 "identity"  identity
                 "last"      last
                 "list"      list
+                "keep"      keep
+                "keyword"   keyword
                 "map"       map
+                "max"       max
+                "min"       min
                 "name"      name
                 "nfirst"    nfirst
                 "next"      next
                 "nnext"     nnext
                 "not"       not
                 "nth"       nth
+                "nthnext"   nthnext
                 "nthrest"   nthrest
                 "peek"      peek
                 "pop"       pop
                 "pr-str"    pr-str
+                "quot"      quot
                 "reduce"    reduce
+                "rem"       rem
+                "remove"    remove
                 "rest"      rest
+                "reverse"   reverse
                 "second"    second
                 "set"       set
                 "shuffle"   shuffle
+                "some"      some
                 "sort"      sort
                 "str"       str
+                "subs"      subs
                 "symbol"    symbol
                 "update"    update
                 "update-in" update-in
@@ -200,6 +228,7 @@
 ;; These are the functions that can be passed to update
 (def symbol->fn-map
   ;; How to automate without access to resolve/ns-resolve?
+  ;; All the predicates need to be in here too.
   {'butlast butlast
    'count   count
    'dec     dec
@@ -220,9 +249,12 @@
             (fn [args]
               (update (vec args) n sym->f)))]
     (case cmd
+      "apply"  (nth-sym->f 1)
       "filter" (nth-sym->f 1)
+      "keep"   (nth-sym->f 1)
       "map"    (nth-sym->f 1)
       "reduce" (nth-sym->f 1)
+      "remove" (nth-sym->f 1)
       "update" (nth-sym->f 1)
       identity)))
 
