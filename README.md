@@ -11,9 +11,9 @@ line module whereas pednx is a port to a single file shebangable planck script.
 $ pednx assoc foo.edn :bar 5
 $ cat foo.edn
 {:bar 5}
-$ pednx assoc-in foo.edn [:baz :bif] :bam
+$ pednx assoc-in foo.edn '[:baz :bif]' :bam
 $ cat foo.edn
-{:bar 5 :baz {:bif :bam}}
+{:baz {:bif :bam}, :bar 5}
 $ pednx remove foo.edn :bar
 $ cat foo.edn
 {:baz {:bif :bam}}

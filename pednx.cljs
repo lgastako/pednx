@@ -151,8 +151,10 @@
     (-write w s)))
 
 (defn create-if-not-exists! [fn]
-  (p :create-if-not-exists! {:fn fn})
-;;  (not-implemented "create-if-not-exists!")
+  ;; (p :create-if-not-exists! {:fn fn})
+  ;;  (not-implemented "create-if-not-exists!")
+  ;; seems to be working without this.  if we don't run into any more trouble
+  ;; soon then rip this out.
   )
 
 (defn spit+ [fn data]
