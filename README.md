@@ -7,7 +7,7 @@ line module whereas pednx is a port to a single file shebangable planck script.
 
 ## Usage
 
-```bash
+```
 $ pednx assoc foo.edn :bar 5
 $ cat foo.edn
 {:bar 5}
