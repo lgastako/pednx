@@ -65,6 +65,7 @@ Coming soon.  For now, see pednx.cljs.
 - Allow calling 0-airty versions of fns but not supplying fn on command
   line... automatically goes to stdout.
 - Seamlessly handle JSON in addition to EDN.
+- Chain multiple xforms in one command invocation for great justice^W, efficiency.
 
 ## License
 
