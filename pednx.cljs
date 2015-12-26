@@ -143,9 +143,9 @@
     args))
 
 (defn -main [& args]
-  ;; (p :-main {:args args})
+  (p :-main {:args args})
   (let [{:keys [cmd args fn error]} (parse-args args)]
-    ;; (p {:cmd cmd :args args :error error})
+    (p {:cmd cmd :args args :error error})
     (if error
       (p :error error)
       (if-let [f (fn<-cmd cmd)]
