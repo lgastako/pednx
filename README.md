@@ -26,6 +26,7 @@ $ cat foo.edn
   - chains of pipes
 - Parse command line as repeated reads instead of space separated reads, so we
   can read vectors, maps, etc.
+  - Maybe quoting is fine?
 
 ## License
 
