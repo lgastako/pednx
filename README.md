@@ -61,6 +61,8 @@ Coming soon.  For now, see pednx.cljs.
 - Parse command line as repeated reads instead of space separated reads, so we
   can read vectors, maps, etc.
   - Maybe quoting is fine?
+- Allow calling 0-airty versions of fns but not supplying fn on command
+  line... automatically goes to stdout.
 
 ## License
 
