@@ -13,7 +13,7 @@
 (defn boom [& args]
   (throw (ex-info "boom" {:boom-args args})))
 
-(def serialize   (comp #(str % "\n") pr-str))
+(def serialize   prn-str)      ;; porn star
 (def deserialize read-string)
 
 (defn p
@@ -108,6 +108,7 @@
                 "flatten"     flatten
                 "fnext"       fnext
                 "fnil"        fnil
+                "frequencies" frequencies
                 "get"         get
                 "inc"         inc
                 "identity"    identity
@@ -133,6 +134,7 @@
                 "peek"        peek
                 "pop"         pop
                 "pr-str"      pr-str
+                "prn-str"     prn-str
                 "quot"        quot
                 "reduce"      reduce
                 "rem"         rem

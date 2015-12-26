@@ -54,6 +54,7 @@ Coming soon.  For now, see pednx.cljs.
 - tests for all existing functions
 - pprint, print-table, etc
 - clojure.set/*
+- regexes
 - bit operations?
 - More examples
   - stdin/stdout
@@ -63,6 +64,7 @@ Coming soon.  For now, see pednx.cljs.
   - Maybe quoting is fine?
 - Allow calling 0-airty versions of fns but not supplying fn on command
   line... automatically goes to stdout.
+- Seamlessly handle JSON in addition to EDN.
 
 ## License
 
